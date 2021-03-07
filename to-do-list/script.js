@@ -1,6 +1,17 @@
-"use strict";
+'use strict';
 // To-do App
 console.log(`To-Do App`);
+
+// console.log(
+//   `text box height:`,
+//   document.querySelector(`.text-input`).getBoundingClientRect().height
+// );
+// console.log(
+//   `button height:`,
+//   document.querySelector(`.button`).getBoundingClientRect().height
+// );
+
+// console.log(`bean`);
 
 /*
 Basic Feature List:
@@ -12,10 +23,12 @@ Basic Feature List:
 
 -- Checklist -- 
 Page Setup
-⭕ - Put a textbox onto the HTML page
-⭕ - Put a submit button on the HTML age
-⭕ - Put a clear all button on the HTML page
-⭕ - Put an unordered list on the HTML page
+🟢 - Put a textbox onto the HTML page
+🟢 - Put a submit button on the HTML age
+🟢 - Put a clear all button on the HTML page
+🟢 - Put an unordered list on the HTML page
+⭕ - Put a complete button with each list item
+⭕ - Put an unordered list with each HTML page
 
 Program
 
