@@ -73,7 +73,7 @@ const createTaskRowElement = function (taskElement) {
 // Page Functions
 const addTasktoPage = function () {
   // Validate input
-  if (!inputText.value) {
+  if (inputText.value !== '') {
     // Create task object
     const task = {
       taskDescription: inputText.value,
