@@ -29,15 +29,16 @@ Program
 
 */
 
+////////////////////////////////////////////
 // Create variables
 const inputText = document.querySelector(`.text-input`);
 const btnSubmit = document.querySelector(`.btn--submit`);
 const btnClearAll = document.querySelector(`.btn--clear-all`);
 const taskContainer = document.querySelector(`.container--task-list`);
-const tasks = [];
+let tasks = [];
 
+////////////////////////////////////////////
 // Functions
-
 // Element Creation
 const createTaskElement = function (taskDescription) {
   const taskEl = document.createElement(`span`);
@@ -61,7 +62,6 @@ const createDeleteButtonElement = function () {
 };
 
 const createTaskRowElement = function (taskElement) {
-  // Build task row element
   const taskRowEl = document.createElement(`div`);
   taskRowEl.insertAdjacentElement(`beforeend`, taskElement);
   taskRowEl.insertAdjacentElement(`beforeend`, createCompleteButtonElement());
@@ -72,44 +72,85 @@ const createTaskRowElement = function (taskElement) {
 
 // Page Functions
 const addTasktoPage = function () {
-  // Create task object
-  const task = {
-    taskDescription: inputText.value,
-    showCompleteButton: true,
-    showDeleteButton: true,
-    taskComplete: false,
-  };
+  // Validate input
+  if (!inputText.value) {
+    // Create task object
+    const task = {
+      taskDescription: inputText.value,
+      showCompleteButton: true,
+      showDeleteButton: true,
+      taskComplete: false,
+    };
 
-  // Add task object to tasks array
-  tasks.push(task);
+    // Add task object to tasks array
+    tasks.push(task);
 
-  // Create task element
-  const taskEl = createTaskElement(task.taskDescription);
+    // Create task element
+    const taskEl = createTaskElement(task.taskDescription);
 
-  // Create task row element
-  const taskRowEl = createTaskRowElement(taskEl);
+    // Create task row element
+    const taskRowEl = createTaskRowElement(taskEl);
 
-  // Add task to task list on page
-  taskContainer.insertAdjacentElement(`beforeend`, taskRowEl);
+    // Add task to task list on page
+    taskContainer.insertAdjacentElement(`beforeend`, taskRowEl);
 
-  // Clear entry form
-  inputText.value = ``;
+    // Clear entry form
+    inputText.value = ``;
+
+    // Add border if there is not one
+    if (taskContainer.style.border === `none`) {
+      taskContainer.style.border = `2px solid gray`;
+    }
+  }
 
   // Focus back onto input text
+  inputText.focus();
 };
 
-const clearAllTasks = function () {};
+// DO I NEED THIS?
+const updateTaskListView = function () {
+  taskContainer.querySelectorAll(`.task-row`).forEach((el, i) => el.remove());
 
-const completeTask = function () {};
+  // ADD
+  // Read through tasks array and put each task item on the page
+};
 
-const deleteTask = function () {};
+const clearAllTasks = function () {
+  tasks = [];
+  updateTaskListView();
 
-// Initialize
+  // Remove border so that no artifacts are left behind in empty list
+  taskContainer.style.border = `none`;
+};
 
+const completeTask = function () {
+  // Put strike-through line on text of task
+  // Update task array to reflect status
+  // Change and/or remove complete button
+};
+
+const deleteTask = function () {
+  // Remove task row from task container
+  // Remove task from task array
+};
+
+////////////////////////////////////////////
+// Initialization
 clearAllTasks();
 
+////////////////////////////////////////////
 // Add event listeners
 
+// Enter key
+inputText.addEventListener(`keydown`, function (e) {
+  // Must be keydown to prevent doublefire when pressing enter on submit button
+  if (e.key === `Enter` && document.activeElement == inputText) {
+    addTasktoPage();
+  }
+});
+
+// Submit Button
 btnSubmit.addEventListener(`click`, addTasktoPage);
 
+// Clear All Button
 btnClearAll.addEventListener(`click`, clearAllTasks);
