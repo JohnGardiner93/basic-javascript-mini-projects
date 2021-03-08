@@ -29,6 +29,8 @@ Basic Feature List:
 
 Advanced Feature List:
 
+- Alternating background color in task list
+- Control width of form and of task rows using something other than Flexbox
 - Ability to reorder task list
 - History of task completion in viewable window
 - Due date for tasks

@@ -9,9 +9,11 @@
     <script defer src="script.js"></script>
   </head>
   <body>
+    <div >
     <div class="container--app">
+
       <h1>To-Do List</h1>
-      <span class="container--form">
+      <div class="container--form">
         <input
           class="text-input"
           type="text"
@@ -20,12 +22,20 @@
         />
         <button class="btn--big btn--submit">Submit</button>
         <button class="btn--big btn--clear-all">Clear All</button>
-      </span>
+      </div>
 
-      <ul class="container--task">
-        <li class="task">Text here</li>
-        <li class="task">Text here</li>
-      </ul>
+      <div class="container--task-list">
+        <div class="task-row">
+          <span class="task">Make a grocery list</span>
+          <span class=".btn--complete-task">✅</span>
+          <span class=".btn--delete-task">❌</span>
+        </div>
+        <div class="task-row">
+          <span class="task">Go to the bank</span>
+          <span class=".btn--complete-task">✅</span>
+          <span class=".btn--delete-task">❌</span>
+        </div>
+      </div>
     </div>
   </body>
 </html>

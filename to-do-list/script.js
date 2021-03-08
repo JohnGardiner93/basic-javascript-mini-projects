@@ -26,9 +26,9 @@ Page Setup
 🟢 - Put a textbox onto the HTML page
 🟢 - Put a submit button on the HTML age
 🟢 - Put a clear all button on the HTML page
-🟢 - Put an unordered list on the HTML page
-⭕ - Put a complete button with each list item
-⭕ - Put an unordered list with each HTML page
+⭕ - Put an task list on the HTML page
+⭕ - Put a complete button with each task item
+⭕ - Put a delete button with each task item
 
 Program
 
