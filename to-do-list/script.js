@@ -48,9 +48,14 @@ const createTaskElement = function (taskDescription) {
 };
 
 const createCompleteButtonElement = function () {
+  // Create element
   const completeTaskButton = document.createElement(`span`);
   completeTaskButton.textContent = `✅`;
-  completeTaskButton.classList.add(`.btn--complete-task`);
+  completeTaskButton.classList.add(`btn--complete-task`);
+
+  // Add event listener
+  completeTaskButton.addEventListener(`click`, completeTask);
+
   return completeTaskButton;
 };
 
@@ -58,6 +63,10 @@ const createDeleteButtonElement = function () {
   const deleteTaskButton = document.createElement(`span`);
   deleteTaskButton.textContent = `❌`;
   deleteTaskButton.classList.add(`btn--delete-task`);
+
+  // Add event listener
+  deleteTaskButton.addEventListener(`click`, deleteTask);
+
   return deleteTaskButton;
 };
 
@@ -107,7 +116,6 @@ const addTasktoPage = function () {
   inputText.focus();
 };
 
-// DO I NEED THIS?
 const updateTaskListView = function () {
   taskContainer.querySelectorAll(`.task-row`).forEach((el, i) => el.remove());
 
@@ -124,14 +132,39 @@ const clearAllTasks = function () {
 };
 
 const completeTask = function () {
+  const taskRowEl = this.parentElement;
+
   // Put strike-through line on text of task
+  taskRowEl
+    .querySelector(`.task`)
+    .style.setProperty(`text-decoration`, `line-through`);
+
   // Update task array to reflect status
+  tasks[findTaskRowPosition(taskRowEl)].taskComplete = true;
+
   // Change and/or remove complete button
+  this.textContent = ``;
+
+  // Remove event listener
+  this.removeEventListener(`click`, completeTask);
 };
 
 const deleteTask = function () {
+  const taskRowEl = this.parentElement;
+  const taskIndex = findTaskRowPosition(taskRowEl);
+  console.log(`task delete`);
+
   // Remove task row from task container
+  taskContainer.children[taskIndex].remove();
+
   // Remove task from task array
+  tasks.splice(taskIndex, 1);
+};
+
+const findTaskRowPosition = function (taskEl) {
+  const childArray = Array.from(taskContainer.children);
+  const index = childArray.findIndex(curEl => curEl === taskEl);
+  return index;
 };
 
 ////////////////////////////////////////////
@@ -139,7 +172,7 @@ const deleteTask = function () {
 clearAllTasks();
 
 ////////////////////////////////////////////
-// Add event listeners
+// Event Listeners
 
 // Enter key
 inputText.addEventListener(`keydown`, function (e) {
