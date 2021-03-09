@@ -20,7 +20,6 @@ Page Setup
 🟢 - Put a delete button with each task item
 
 Program
-
 1. Capture text from text input when the submit button is pressed
 2. Add the text, a check button, and a delete button to the bottom of the unordered list
 3. If the user presses the check button, strikethrough the items on the list and remove the submit button
@@ -52,25 +51,23 @@ const createCompleteButtonElement = function () {
   const completeTaskButton = document.createElement(`span`);
   completeTaskButton.textContent = `✅`;
   completeTaskButton.classList.add(`btn--complete-task`);
-
   // Add event listener
   completeTaskButton.addEventListener(`click`, completeTask);
-
   return completeTaskButton;
 };
 
 const createDeleteButtonElement = function () {
+  // Create element
   const deleteTaskButton = document.createElement(`span`);
   deleteTaskButton.textContent = `❌`;
   deleteTaskButton.classList.add(`btn--delete-task`);
-
   // Add event listener
   deleteTaskButton.addEventListener(`click`, deleteTask);
-
   return deleteTaskButton;
 };
 
 const createTaskRowElement = function (taskElement) {
+  // Create element
   const taskRowEl = document.createElement(`div`);
   taskRowEl.insertAdjacentElement(`beforeend`, taskElement);
   taskRowEl.insertAdjacentElement(`beforeend`, createCompleteButtonElement());
@@ -90,50 +87,41 @@ const addTasktoPage = function () {
       showDeleteButton: true,
       taskComplete: false,
     };
-
     // Add task object to tasks array
     tasks.push(task);
 
     // Create task element
     const taskEl = createTaskElement(task.taskDescription);
-
     // Create task row element
     const taskRowEl = createTaskRowElement(taskEl);
 
     // Add task to task list on page
     taskContainer.insertAdjacentElement(`beforeend`, taskRowEl);
-
-    // Clear entry form
-    inputText.value = ``;
-
-    // Add border if there is not one
-    if (taskContainer.style.border === `none`) {
-      taskContainer.style.border = `2px solid gray`;
-    }
+    updateTaskListView();
   }
-
+  // Clear entry form
+  inputText.value = ``;
   // Focus back onto input text
   inputText.focus();
 };
 
 const updateTaskListView = function () {
-  taskContainer.querySelectorAll(`.task-row`).forEach((el, i) => el.remove());
-
-  // ADD
-  // Read through tasks array and put each task item on the page
+  // Toggle border based on number of tasks
+  if (tasks.length === 0) {
+    taskContainer.style.border = `none`;
+  } else if (tasks.length > 0 && taskContainer.style.border === `none`) {
+    taskContainer.style.border = `2px solid gray`;
+  }
 };
 
 const clearAllTasks = function () {
   tasks = [];
+  taskContainer.querySelectorAll(`.task-row`).forEach(el => el.remove());
   updateTaskListView();
-
-  // Remove border so that no artifacts are left behind in empty list
-  taskContainer.style.border = `none`;
 };
 
 const completeTask = function () {
   const taskRowEl = this.parentElement;
-
   // Put strike-through line on text of task
   taskRowEl
     .querySelector(`.task`)
@@ -152,13 +140,14 @@ const completeTask = function () {
 const deleteTask = function () {
   const taskRowEl = this.parentElement;
   const taskIndex = findTaskRowPosition(taskRowEl);
-  console.log(`task delete`);
 
   // Remove task row from task container
   taskContainer.children[taskIndex].remove();
 
   // Remove task from task array
   tasks.splice(taskIndex, 1);
+
+  updateTaskListView();
 };
 
 const findTaskRowPosition = function (taskEl) {
