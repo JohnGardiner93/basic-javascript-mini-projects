@@ -14,9 +14,9 @@ h1 {
 /* Entry form */
 .container--form {
   display: flex;
+  flex-direction: row;
   max-width: 850px;
   min-width: 250px;
-  flex-grow: 1;
   align-content: center;
 }
 
