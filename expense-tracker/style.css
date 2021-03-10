@@ -1,0 +1,10 @@
+h1 {
+  color: rgb(3, 184, 33);
+  text-align: center;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
