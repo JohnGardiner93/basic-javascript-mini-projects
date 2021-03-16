@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
-    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
     <a href="\index.html">Main Page</a>
   </head>
   <body>
@@ -31,7 +31,7 @@
       <button class="btn btn--submit">Submit</button>
       <button class="btn btn--clear-form">Clear Form</button>
     </div>
-    <table>
+    <table class="expense-table">
       <thead>
         <tr>
           <th colspan="5">Expenses</th>
@@ -45,14 +45,14 @@
           <td class="header date">Date</td>
           <td class="header delete"></td>
         </tr>
-        <tr>
+        <tr id="001">
           <td>001</td>
           <td>Beach ball</td>
           <td>$24.93</td>
           <td>07/28/2020</td>
           <td>❌</td>
         </tr>
-        <tr>
+        <tr id="002">
           <td>002</td>
           <td>Pallet of kidney beans</td>
           <td>$850.26</td>
