@@ -12,16 +12,16 @@ Basic Feature List:
 
 --- Checklist ---
 Page-Setup:
-⭕ - Define basic heading information
-⭕ - Text input
-⭕ - Date input
-⭕ - Amount input
-⭕ - Submit button
-⭕ - Clear form button
-⭕ - Delete button
-⭕ - Table for expenses
-⭕ - Expense row in table
-⭕ - Checkbox to delete row
+✅ - Define basic heading information
+✅ - Text input
+✅ - Date input
+✅ - Amount input
+✅ - Submit button
+✅ - Clear form button
+✅ - Delete button
+✅ - Table for expenses
+✅ - Expense row in table
+✅ - Checkbox to delete row
 
 Program Flow:
 1. User information captured from inputs including expense description, date, and amount.

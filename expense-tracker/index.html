@@ -12,9 +12,54 @@
   <body>
     <h1>Expense Tracker</h1>
     <form>
-      <input type="text" name="Expense Description" />
-      <input type="number" name="Expense Amount" />
+      <input
+        type="text"
+        name="Expense Description"
+        placeholder="Expense description"
+      />
+      <span>$</span>
+      <input
+        type="number"
+        name="Expense Amount"
+        placeholder="Amount"
+        min="0.01"
+        step="0.01"
+      />
       <input type="date" name="Expense Date" />
     </form>
+    <div class="container-btn">
+      <button class="btn btn--submit">Submit</button>
+      <button class="btn btn--clear-form">Clear Form</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="5">Expenses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="header id">ID</td>
+          <td class="header expense">Expense</td>
+          <td class="header amt">Amount</td>
+          <td class="header date">Date</td>
+          <td class="header delete"></td>
+        </tr>
+        <tr>
+          <td>001</td>
+          <td>Beach ball</td>
+          <td>$24.93</td>
+          <td>07/28/2020</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>002</td>
+          <td>Pallet of kidney beans</td>
+          <td>$850.26</td>
+          <td>07/29/2020</td>
+          <td>❌</td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>
