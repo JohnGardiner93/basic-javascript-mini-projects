@@ -33,10 +33,28 @@ Program Flow:
 */
 
 ////////////////////////////////////////////
+// Class declarations
+// Expenses
+class Expense {
+  #id;
+  description;
+  amount;
+  date;
+
+  constructor(description, amount, date) {
+    this.description = description;
+    this.amount = amount;
+    this.date = date;
+    this.#id = idSet.shift();
+  }
+}
+
+////////////////////////////////////////////
 // Variables
-const inputDescription = document.getElementsByName(`Expense Description`);
-const inputAmount = document.getElementsByName(`Expense Amount`);
-const inputDate = document.getElementsByName(`Expense Date`);
+const form = document.querySelector(`.form`);
+const inputDescription = document.getElementsByName(`Expense Description`)[0];
+const inputAmount = document.getElementsByName(`Expense Amount`)[0];
+const inputDate = document.getElementsByName(`Expense Date`)[0];
 const btnSubmit = document.querySelector(`.btn--submit`);
 const btnClearForm = document.querySelector(`.btn--clear-form`);
 const tableBody = document
@@ -46,42 +64,56 @@ const tableBody = document
 let idSet = Array(100)
   .fill()
   .map((_, index) => index);
-////////////////////////////////////////////
-// Class declarations
-// Expenses
-class Expense {
-  #id;
-  #description;
-  #amount;
-  #date;
-
-  constructor(description, amount, date) {
-    this.#description = description;
-    this.#amount = amount;
-    this.#date = date;
-    this.#id = idSet.shift();
-  }
-}
-
-////////////////////////////////////////////
-// Functions
-const removeExpense = function (id) {
-  document.getElementById(id).remove();
-};
-
-const clearForm = function () {};
-
-////////////////////////////////////////////
-// Event Listeners
-btnClearForm.addEventListener(`click`, clearForm);
-
-////////////////////////////////////////////
-// Initialize
-console.log(`Expense Tracker`);
 
 ////////////////////////////////////////////
 // Testing
-const testExpense = new Expense(`Test`, 40.0, `4 / 3 / 06`);
-const testExpense2 = new Expense(`Test 2`, 40.0, `4 / 3 / 06`);
-console.log(testExpense);
-console.log(testExpense2);
+
+class ExpenseApp {
+  #expenses = [];
+
+  constructor() {
+    // Add Event Listeners
+    btnClearForm.addEventListener(`click`, this.clearForm.bind(this));
+    btnSubmit.addEventListener(`click`, this.submitForm.bind(this));
+
+    console.log(`Expense Tracker`);
+  }
+
+  removeExpense(id) {
+    document.getElementById(id).remove();
+  }
+
+  clearForm() {
+    inputDescription.value = inputAmount.value = inputDate.value = '';
+  }
+
+  submitForm(e) {
+    e.preventDefault();
+
+    // Capture inputs
+    const description = inputDescription.value;
+    const amount = inputAmount.value;
+    const date = inputDate.value;
+
+    // Validate inputs against guard clause
+    if (!description || !amount || !date) return;
+
+    // Clear Form
+    this.clearForm();
+
+    // Display error message
+
+    // Create expense object
+    const expense = new Expense(description, amount, date);
+
+    // Add expense object to expenses array
+    this.#expenses.push(expense);
+
+    // Add expense to expense table
+
+    console.log(expense);
+    console.log(this.#expenses);
+  }
+}
+
+const expenseApp = new ExpenseApp();
