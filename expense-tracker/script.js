@@ -36,7 +36,6 @@ Program Flow:
 // Class declarations
 // Expenses
 class Expense {
-  #id;
   description;
   amount;
   date;
@@ -45,7 +44,6 @@ class Expense {
     this.description = description;
     this.amount = amount;
     this.date = date;
-    this.#id = idSet.shift();
   }
 }
 
@@ -60,60 +58,167 @@ const btnClearForm = document.querySelector(`.btn--clear-form`);
 const tableBody = document
   .querySelector(`.expense-table`)
   .getElementsByTagName(`tbody`)[0];
+const table = tableBody.closest(`table`);
 
-let idSet = Array(100)
-  .fill()
-  .map((_, index) => index);
+console.log(tableBody);
 
 ////////////////////////////////////////////
 // Testing
 
 class ExpenseApp {
   #expenses = [];
+  #idSet;
 
   constructor() {
     // Add Event Listeners
-    btnClearForm.addEventListener(`click`, this.clearForm.bind(this));
-    btnSubmit.addEventListener(`click`, this.submitForm.bind(this));
+    btnClearForm.addEventListener(`click`, this._clearForm.bind(this));
+    btnSubmit.addEventListener(`click`, this._submitForm.bind(this));
+    this.#idSet = Array(1000)
+      .fill()
+      .map((_, index) => index + 1);
 
     console.log(`Expense Tracker`);
   }
 
-  removeExpense(id) {
-    document.getElementById(id).remove();
+  _removeExpense(id) {
+    // Select table rows with data (those that have dataset id's)
+    const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
+
+    // Find the requested expense in the table
+    const expense = liveExpenses.filter(obj => +obj.dataset?.id === id);
+
+    // Check that an expense was actually found
+    if (expense.length === 0) return;
+
+    // Remove the selected expense from the expense array
+    // ADD CODE HERE
+
+    // Remove the selected expense from the table
+    expense[0].remove();
   }
 
-  clearForm() {
+  _clearForm() {
     inputDescription.value = inputAmount.value = inputDate.value = '';
   }
 
-  submitForm(e) {
-    e.preventDefault();
+  _submitForm(e) {
+    if (e) e.preventDefault();
 
     // Capture inputs
     const description = inputDescription.value;
-    const amount = inputAmount.value;
+    const amount = +inputAmount.value;
     const date = inputDate.value;
 
     // Validate inputs against guard clause
-    if (!description || !amount || !date) return;
+    if (!description || !amount || !date || !(amount > 0)) {
+      // Display error message
+      return;
+    }
+
+    // Format date once confirmed to be valid
+    const formattedDate = this._formatDate(date);
 
     // Clear Form
-    this.clearForm();
-
-    // Display error message
+    this._clearForm();
 
     // Create expense object
-    const expense = new Expense(description, amount, date);
-
+    const expense = new Expense(description, amount, formattedDate);
+    // Assign ID to object
+    expense.id = this._generateIDNumber();
     // Add expense object to expenses array
     this.#expenses.push(expense);
 
     // Add expense to expense table
+    const expenseEl = this._generateExpenseElement(expense);
+    this._addExpenseToTable(expenseEl);
 
     console.log(expense);
-    console.log(this.#expenses);
   }
+
+  _formatDate(date) {
+    return new Intl.DateTimeFormat(`en-US`).format(Date.parse(date));
+  }
+
+  _clearAllExpenses() {
+    // Clear expenses array
+    this.#expenses = [];
+
+    // Clear expense table
+    this._clearExpenseTable();
+  }
+
+  _clearExpenseTable() {
+    const blankTableBody = `
+      <tbody>
+        <tr>
+          <td class="header id">ID</td>
+          <td class="header expense">Expense</td>
+          <td class="header amt">Amount</td>
+          <td class="header date">Date</td>
+          <td class="header delete"></td>
+        </tr>
+      </tbody>
+      `;
+
+    tableBody.innerHTML = blankTableBody;
+  }
+
+  _generateIDNumber() {
+    return this.#idSet.shift();
+  }
+
+  _generateExpenseElement(expense) {
+    const html = `
+        <tr data-id="${this._stringifyID(expense.id)}">
+          <td>${this._stringifyID(expense.id)}</td>
+          <td>${expense.description}</td>
+          <td>$${this._stringifyAmount(expense.amount)}</td>
+          <td>${expense.date}</td>
+          <td>❌</td>
+        </tr>
+     `;
+
+    return html;
+  }
+
+  _addExpenseToTable(expenseEl) {
+    tableBody.insertAdjacentHTML(`beforeend`, expenseEl);
+  }
+
+  _stringifyID(id) {
+    // Add padding to string for pleasing appearance ("003")
+    return `${id}`.padStart(3, `0`);
+  }
+
+  _stringifyAmount(amt) {
+    // Convert amount to string
+    let strAmt = `` + amt;
+
+    // If the provided number does not have a decimal place, add a decimal and zeroes
+    if (!strAmt.includes(`.`)) strAmt += `.00`;
+
+    return strAmt;
+  }
+
+  _displayErrorMessage() {
+    console.log(`Error message`);
+  }
+
+  _removeErrorMessage() {}
 }
 
 const expenseApp = new ExpenseApp();
+
+////////////////////////////////////////////
+// Test inputs
+
+expenseApp._clearAllExpenses();
+inputDescription.value = `Test1`;
+inputAmount.value = 34;
+inputDate.value = `2021-03-18`;
+expenseApp._submitForm();
+expenseApp._removeExpense(1);
+inputDescription.value = `Test2`;
+inputAmount.value = 34;
+inputDate.value = `2021-03-18`;
+expenseApp._submitForm();
