@@ -68,6 +68,7 @@ console.log(tableBody);
 class ExpenseApp {
   #expenses = [];
   #idSet;
+  fakeExpenses = [];
 
   constructor() {
     // Add Event Listeners
@@ -80,21 +81,48 @@ class ExpenseApp {
     console.log(`Expense Tracker`);
   }
 
-  _removeExpense(id) {
+  _removeExpenseOLD(id) {
+    console.log(`Removing id: `, id);
     // Select table rows with data (those that have dataset id's)
     const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
 
     // Find the requested expense in the table
-    const expense = liveExpenses.filter(obj => +obj.dataset?.id === id);
+    const expenseEl = liveExpenses.filter(obj => +obj.dataset?.id === id);
 
     // Check that an expense was actually found
-    if (expense.length === 0) return;
+    if (expenseEl.length === 0) return;
 
-    // Remove the selected expense from the expense array
-    // ADD CODE HERE
+    // console.log(`Expense arry pre-cut`, this.#expenses);
+    // Find and remove the selected expense from the expense array
+    this.#expenses.splice(this.#expenses.findIndex(obj => +obj.id === id));
+
+    // console.log(`Expense arry post-cut`, this.#expenses);
 
     // Remove the selected expense from the table
-    expense[0].remove();
+    expenseEl[0].remove();
+  }
+
+  _removeExpense(el) {
+    console.log(`Removing id: `, el.dataset.id);
+    // Select table rows with data (those that have dataset id's)
+    // const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
+
+    // Find the requested expense in the table
+    // const expenseEl = liveExpenses.filter(obj => +obj.dataset?.id === id);
+
+    // Check that an expense was actually found
+    // if (expenseEl.length === 0) return;
+
+    // console.log(`Expense arry pre-cut`, this.#expenses);
+    // Find and remove the selected expense from the expense array
+    this.#expenses.splice(
+      this.#expenses.findIndex(obj => +obj.id === el.dataset.id)
+    );
+
+    // console.log(`Expense arry post-cut`, this.#expenses);
+
+    // Remove the selected expense from the table
+    el.remove();
   }
 
   _clearForm() {
@@ -109,9 +137,12 @@ class ExpenseApp {
     const amount = +inputAmount.value;
     const date = inputDate.value;
 
+    console.log(`inputs are: `, description, amount, date);
+
     // Validate inputs against guard clause
     if (!description || !amount || !date || !(amount > 0)) {
       // Display error message
+      console.error(`Inputs are not valid`);
       return;
     }
 
@@ -132,7 +163,7 @@ class ExpenseApp {
     const expenseEl = this._generateExpenseElement(expense);
     this._addExpenseToTable(expenseEl);
 
-    console.log(expense);
+    // console.log(expense);
   }
 
   _formatDate(date) {
@@ -174,7 +205,7 @@ class ExpenseApp {
           <td>${expense.description}</td>
           <td>$${this._stringifyAmount(expense.amount)}</td>
           <td>${expense.date}</td>
-          <td>❌</td>
+          <td class="btn--delete-row">❌</td>
         </tr>
      `;
 
@@ -183,6 +214,12 @@ class ExpenseApp {
 
   _addExpenseToTable(expenseEl) {
     tableBody.insertAdjacentHTML(`beforeend`, expenseEl);
+    const newRowEl = tableBody.lastElementChild;
+    console.log(newRowEl);
+    newRowEl.addEventListener(
+      `click`,
+      this._removeExpense.bind(this, newRowEl)
+    );
   }
 
   _stringifyID(id) {
@@ -199,12 +236,6 @@ class ExpenseApp {
 
     return strAmt;
   }
-
-  _displayErrorMessage() {
-    console.log(`Error message`);
-  }
-
-  _removeErrorMessage() {}
 }
 
 const expenseApp = new ExpenseApp();
@@ -215,9 +246,9 @@ const expenseApp = new ExpenseApp();
 expenseApp._clearAllExpenses();
 inputDescription.value = `Test1`;
 inputAmount.value = 34;
-inputDate.value = `2021-03-18`;
+inputDate.value = `1990-03-18`;
 expenseApp._submitForm();
-expenseApp._removeExpense(1);
+// expenseApp._removeExpense(1);
 inputDescription.value = `Test2`;
 inputAmount.value = 34;
 inputDate.value = `2021-03-18`;

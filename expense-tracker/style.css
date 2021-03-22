@@ -109,3 +109,7 @@ tfoot {
 .delete {
   border: none;
 }
+
+.btn--delete-row {
+  background-color: rgba(35, 129, 59, 0.39);
+}
