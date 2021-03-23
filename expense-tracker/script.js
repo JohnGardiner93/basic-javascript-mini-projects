@@ -79,23 +79,6 @@ class ExpenseApp {
     console.log(`Expense Tracker`);
   }
 
-  _removeExpenseOLD(id) {
-    // Select table rows with data (those that have dataset id's)
-    const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
-
-    // Find the requested expense in the table
-    const expenseEl = liveExpenses.filter(obj => +obj.dataset?.id === id);
-
-    // Check that an expense was actually found
-    if (expenseEl.length === 0) return;
-
-    // Find and remove the selected expense from the expense array
-    this.#expenses.splice(this.#expenses.findIndex(obj => +obj.id === id));
-
-    // Remove the selected expense from the table
-    expenseEl[0].remove();
-  }
-
   // Remove a specific expense from the application (expense array and expense table)
   _removeExpense(el) {
     // Find and remove the selected expense from the expense array
@@ -225,16 +208,3 @@ class ExpenseApp {
 }
 
 const expenseApp = new ExpenseApp();
-
-////////////////////////////////////////////
-// Test inputs
-expenseApp._clearAllExpenses();
-inputDescription.value = `Test1`;
-inputAmount.value = 34;
-inputDate.value = `1990-03-18`;
-expenseApp._submitForm();
-// expenseApp._removeExpense(1);
-inputDescription.value = `Test2`;
-inputAmount.value = 34;
-inputDate.value = `2021-03-18`;
-expenseApp._submitForm();

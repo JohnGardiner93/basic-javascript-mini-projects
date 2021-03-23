@@ -67,6 +67,7 @@ Basic Feature List:
 - Display notes
 - click on something to show a note in more detail
 - Delete notes
+- Store notes in localData
 
 Advanced Feature List:
 

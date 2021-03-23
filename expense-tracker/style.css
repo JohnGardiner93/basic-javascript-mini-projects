@@ -108,6 +108,7 @@ tfoot {
 
 .delete {
   border: none;
+  min-width: 1.5rem;
 }
 
 .btn--delete-row {
