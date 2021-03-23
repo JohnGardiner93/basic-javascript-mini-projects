@@ -1,5 +1,4 @@
 'use strict';
-
 /*
 // Program
 Basic Feature List:
@@ -60,10 +59,8 @@ const tableBody = document
   .getElementsByTagName(`tbody`)[0];
 const table = tableBody.closest(`table`);
 
-console.log(tableBody);
-
 ////////////////////////////////////////////
-// Testing
+// Main App
 
 class ExpenseApp {
   #expenses = [];
@@ -77,12 +74,12 @@ class ExpenseApp {
     this.#idSet = Array(1000)
       .fill()
       .map((_, index) => index + 1);
+    this._clearAllExpenses();
 
     console.log(`Expense Tracker`);
   }
 
   _removeExpenseOLD(id) {
-    console.log(`Removing id: `, id);
     // Select table rows with data (those that have dataset id's)
     const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
 
@@ -92,35 +89,19 @@ class ExpenseApp {
     // Check that an expense was actually found
     if (expenseEl.length === 0) return;
 
-    // console.log(`Expense arry pre-cut`, this.#expenses);
     // Find and remove the selected expense from the expense array
     this.#expenses.splice(this.#expenses.findIndex(obj => +obj.id === id));
-
-    // console.log(`Expense arry post-cut`, this.#expenses);
 
     // Remove the selected expense from the table
     expenseEl[0].remove();
   }
 
+  // Remove a specific expense from the application (expense array and expense table)
   _removeExpense(el) {
-    console.log(`Removing id: `, el.dataset.id);
-    // Select table rows with data (those that have dataset id's)
-    // const [...liveExpenses] = tableBody.querySelectorAll(`tr[data-id]`);
-
-    // Find the requested expense in the table
-    // const expenseEl = liveExpenses.filter(obj => +obj.dataset?.id === id);
-
-    // Check that an expense was actually found
-    // if (expenseEl.length === 0) return;
-
-    // console.log(`Expense arry pre-cut`, this.#expenses);
     // Find and remove the selected expense from the expense array
     this.#expenses.splice(
       this.#expenses.findIndex(obj => +obj.id === el.dataset.id)
     );
-
-    // console.log(`Expense arry post-cut`, this.#expenses);
-
     // Remove the selected expense from the table
     el.remove();
   }
@@ -130,14 +111,13 @@ class ExpenseApp {
   }
 
   _submitForm(e) {
+    // Prevent default form behavior if an event is passed into the method. Allows for manual testing, disabling need for event-firing specifically
     if (e) e.preventDefault();
 
     // Capture inputs
     const description = inputDescription.value;
     const amount = +inputAmount.value;
     const date = inputDate.value;
-
-    console.log(`inputs are: `, description, amount, date);
 
     // Validate inputs against guard clause
     if (!description || !amount || !date || !(amount > 0)) {
@@ -162,22 +142,25 @@ class ExpenseApp {
     // Add expense to expense table
     const expenseEl = this._generateExpenseElement(expense);
     this._addExpenseToTable(expenseEl);
-
-    // console.log(expense);
   }
 
+  // Formats the expense date
   _formatDate(date) {
-    return new Intl.DateTimeFormat(`en-US`).format(Date.parse(date));
+    const [year, month, day] = date.split(`-`);
+    return new Intl.DateTimeFormat(`en-US`).format(
+      new Date(year, month - 1, day)
+    );
   }
 
+  // Clears all expenses shown and stored in the #expenses array
   _clearAllExpenses() {
     // Clear expenses array
     this.#expenses = [];
-
     // Clear expense table
     this._clearExpenseTable();
   }
 
+  // Clears expense table by changing the HTML of the tableBody to a fresh table
   _clearExpenseTable() {
     const blankTableBody = `
       <tbody>
@@ -190,14 +173,15 @@ class ExpenseApp {
         </tr>
       </tbody>
       `;
-
     tableBody.innerHTML = blankTableBody;
   }
 
+  // Generates ID number for expenses (elements and array ojects)
   _generateIDNumber() {
     return this.#idSet.shift();
   }
 
+  // Generates an expense element
   _generateExpenseElement(expense) {
     const html = `
         <tr data-id="${this._stringifyID(expense.id)}">
@@ -208,14 +192,16 @@ class ExpenseApp {
           <td class="btn--delete-row">❌</td>
         </tr>
      `;
-
     return html;
   }
 
+  // Adds the provide expense element to the expense table
   _addExpenseToTable(expenseEl) {
+    // Insert expense element
     tableBody.insertAdjacentHTML(`beforeend`, expenseEl);
+
+    // Add an event listener on the "X" button tied directly to this table row
     const newRowEl = tableBody.lastElementChild;
-    console.log(newRowEl);
     newRowEl.addEventListener(
       `click`,
       this._removeExpense.bind(this, newRowEl)
@@ -223,26 +209,25 @@ class ExpenseApp {
   }
 
   _stringifyID(id) {
-    // Add padding to string for pleasing appearance ("003")
+    // Add padding to string for pleasing appearance (ex: "003")
     return `${id}`.padStart(3, `0`);
   }
 
   _stringifyAmount(amt) {
     // Convert amount to string
     let strAmt = `` + amt;
-
-    // If the provided number does not have a decimal place, add a decimal and zeroes
-    if (!strAmt.includes(`.`)) strAmt += `.00`;
-
-    return strAmt;
+    // If the provided number is not formatted as a dollar would, add a decimal and zeroes
+    if (!strAmt.includes(`.`)) strAmt += `.`;
+    const [dollars, cents] = strAmt.split(`.`);
+    return dollars + `.` + cents.padEnd(2, `0`);
   }
+  i;
 }
 
 const expenseApp = new ExpenseApp();
 
 ////////////////////////////////////////////
 // Test inputs
-
 expenseApp._clearAllExpenses();
 inputDescription.value = `Test1`;
 inputAmount.value = 34;
